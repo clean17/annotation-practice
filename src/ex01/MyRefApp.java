@@ -1,26 +1,48 @@
 package ex01;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
+
 public class MyRefApp {
+	public static void test(String path) {
+		try {
+		Method[] test = ControllerScanner.scan("ex01");
+		Arrays.asList(test).forEach((e)->{
+			Annotation anno = ((AccessibleObject) e).getDeclaredAnnotation(RequestMapping.class);
+			RequestMapping rm = (RequestMapping) anno;
+		if(rm.uri().equalsIgnoreCase(path)) {
+			try {
+				e.invoke(new UserController());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+		});
+	} catch (Exception e1) {
+		e1.printStackTrace();
+	}
+		
+	};
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		String path = sc.nextLine();
+		test(path);
 		
-		UserController uc = new UserController();
-		// 리플렉션은 런타임시 여러가지를 보고 연결 이번에는 어노테이션으로 만들어 본다
-		Method[] methods = uc.getClass().getDeclaredMethods();
-//		System.out.println(methods.length);
-//		Arrays.asList(methods).forEach((e)->{System.out.println(e.getName());});
-//		Arrays.asList(methods).forEach((e)->{System.out.println(e.getDeclaredAnnotation(RequestMapping.class));});
-		Arrays.asList(methods).forEach((e)->{
-			Annotation anno = e.getDeclaredAnnotation(RequestMapping.class);
-			RequestMapping rm = (RequestMapping) anno;
-			System.out.println(rm.uri());
+//		UserController uc = new UserController();	
+//		Method[] methods = uc.getClass().getDeclaredMethods();
+//		// 패키지 내의 모든 어노테이션을 가져오는 배열 ? 컴포넌트 스캔을 통해서 어노테이션이 붙은거를 다 가져와야함
+//		
+//		Arrays.asList(methods).forEach((e)->{
+//			System.out.println(e);
+//			Annotation anno = e.getDeclaredAnnotation(RequestMapping.class);
+//			System.out.println(anno);
+//			RequestMapping rm = (RequestMapping) anno;
+////			System.out.println(rm.uri());
 //			if(rm.uri().equalsIgnoreCase(path)) {
 //				try {
 //					e.invoke(uc);
@@ -28,8 +50,31 @@ public class MyRefApp {
 //					e1.printStackTrace();
 //				}
 //			}
-		});
+//		});
 		
-		// 이제 UserController 밖에 없으니까 새로운 컨트롤러가 필요하면 ? 어노테이션을 만들어서 컴포넌트 스캔을 시켜줘야함
+//		try {
+//			Method[] test = ControllerScanner.scan(UserController.class)
+////					.getClass().getDeclaredClasses()
+//					;
+//			Arrays.asList(test).forEach((e)->{
+////				System.out.println(e);
+//				Annotation anno = ((AccessibleObject) e).getDeclaredAnnotation(RequestMapping.class);
+////				System.out.println(anno);
+//				RequestMapping rm = (RequestMapping) anno;
+////				System.out.println(rm.uri());
+//			if(rm.uri().equalsIgnoreCase(path)) {
+//				try {
+//					e.invoke(new UserController());
+//				} catch (Exception e1) {
+//					e1.printStackTrace();
+//				}
+//			}
+//			});
+//	
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//		}
+		
+
 	}
 }
