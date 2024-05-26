@@ -1,4 +1,7 @@
-package ex01;
+package ex01.controller;
+
+import ex01.annotation.Controller;
+import ex01.annotation.RequestMapping;
 
 @Controller
 public class UserController {

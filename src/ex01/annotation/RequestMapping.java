@@ -1,14 +1,12 @@
-package ex01;
+package ex01.annotation;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Documented
-public @interface MyComponent {
-    // 추가적인 속성이 필요하다면 여기에 정의
+public @interface RequestMapping {
+	String uri();
 }
